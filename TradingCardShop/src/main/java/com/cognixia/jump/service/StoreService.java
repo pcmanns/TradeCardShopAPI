@@ -56,11 +56,16 @@ public class StoreService {
 	//add an Order
 	public Order addOrder(Order order) throws ResourceNotFoundException {
 		
-		Store update= getStoreByStoreName(order.getStoreName());
-		order.setTotal(findTotal(order));
-		update=editCardByOrder(order);
-		update.getTradesOrder().add(order);
-		update=repo.save(update);
+		if(order.getRequestCopys().size()==order.getCard().size()) {
+			Store update= getStoreByStoreName(order.getStoreName());
+			order.setTotal(findTotal(order));
+			update=editCardByOrder(order);
+			update.getTradesOrder().add(order);
+			update=repo.save(update);
+		}
+		else {
+			throw new ResourceNotFoundException("Card name and request number are not equal");
+		}
 		return order;
 	}
 	//add Cards to the Collection
